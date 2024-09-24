@@ -4,7 +4,14 @@ import { taskModel } from "../models/task.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodeMailer from "nodemailer";
-import crypto from "crypto"
+import Crypto from "crypto"
+import Razorpay from "razorpay"
+
+
+const razorpay=new Razorpay({
+key_id : "rzp_test_Qb9FJurfVY6ULB",
+key_secret:"YN2evifmyeL8T4qYmVresH3k"
+}) 
 
 //configuration of cloudinary
 cloudinary.config({ 
@@ -51,7 +58,7 @@ const loginUser = async (req, res) => {
     if (!comparePassword) {
       res.status(422).json({ message: "Incorrect Password" });
     } else {
-      const UserToken = jwt.sign({ email , userId }, process.env.JWT_SECRECT);
+      const UserToken = jwt.sign({ email , userId }, "vednidhi123");
 
       const options = {
         expire: new Date(Date.now()),
@@ -454,6 +461,68 @@ const awsuserProfile=async(req,res)=>{
 }
 
 
+
+
+const paymentRecipet=async(req,res)=>{
+
+  const {amount}=req.body
+ 
+  const option={
+    amount:Number(amount*100),
+    currency:"INR",
+    receipt:`Reciept# ${Crypto.randomBytes(10).toString("hex")}`,
+    payment_capture:1,
+  }
+
+  try{
+    const response=await razorpay.orders.create(option)
+    const{id,amount,receipt}=response
+
+    res.json({
+      OrderId:id,
+      amount,
+      receipt
+    })
+    
+  }catch(err){
+    console.log("Internal server error",err)
+  }
+
+}
+
+const verifyPayment=async(req,res)=>{
+const{razorpay_order_id,razorpay_payment_id,razorpay_signature}=req.body
+
+// console.log(`R_order_id ${razorpay_order_id}`)
+// console.log(`R_payment_id ${razorpay_payment_id}`)
+
+let mysign= `${razorpay_order_id}|${razorpay_payment_id}`
+ 
+let expectedSignature=Crypto
+.createHmac("sha256", "YN2evifmyeL8T4qYmVresH3k")
+.update(mysign)
+.digest("hex");
+
+const isAuthenticate=razorpay_signature==expectedSignature
+
+if(isAuthenticate){
+  res.redirect(`http://localhost:5173/paymentSuccess?reference=${razorpay_payment_id}`)
+
+}else{
+  res
+  .status(422)
+  .json({message:"payment Failed",success:false})
+}
+}
+
+
+
+
+// const token=TokenGenerated("shanukumar7988@gmail.com","Vednidhi")
+// console.log(token)
+
+
+
 export {
   registerUser,
   loginUser,
@@ -474,4 +543,6 @@ export {
   changepassword,
   otpverification,
   awsuserProfile,
+  paymentRecipet,
+  verifyPayment
 };

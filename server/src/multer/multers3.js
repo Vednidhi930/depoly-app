@@ -24,6 +24,5 @@ const s3bucket=multer({
 })
 
 
-
 export default s3bucket
 

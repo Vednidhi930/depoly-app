@@ -11,7 +11,6 @@ const Home = () => {
   const [user, setUser] = useState("");
 
   const getdata = async () => {
-
     try {
       const response = await axios.get("/user");
       setUser(response.data.user);
@@ -29,8 +28,6 @@ const Home = () => {
     getdata();
   }, []);
 
-  
-
   const handleClick = async () => {
     try {
       const response = await axios.get("/user/logout");
@@ -45,11 +42,14 @@ const Home = () => {
 
   return (
     <>
-    <div className="flex gap-2 p-2 m-1" >
-      <Sidebar handleClick={handleClick} user={user}/>
-      <div className="w-[100vw] rounded-lg  flex flex-col  border border-black" style={{backgroundColor:"rgba(245, 246, 250,1.0)"}}>
-        <Outlet handleClick={handleClick} user={user}/>
-      </div>
+      <div className="flex gap-2 p-2 m-1">
+        <Sidebar handleClick={handleClick} user={user} />
+        <div
+          className="w-[100vw] rounded-lg  flex flex-col  border border-black"
+          style={{ backgroundColor: "rgba(245, 246, 250,1.0)" }}
+        >
+          <Outlet handleClick={handleClick} user={user} />
+        </div>
       </div>
     </>
   );

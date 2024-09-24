@@ -21,6 +21,6 @@ const taskSchema=Schema({
         type:Boolean,
         default:false,
     }
-},{timeStamps:true})
+},{ timestamps: true } )
 
 export const taskModel=model("task",taskSchema)

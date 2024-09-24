@@ -13,6 +13,13 @@ import Forget from "./components/Forget"
 import axios from "axios";
 import Reset from "./components/Reset";
 import Otp from "./components/Otp";
+import SocketIO from "./components/SocketIO";
+import Product from "./components/Product";
+import PaymentSuccess from "./components/PaymentSuccess";
+import TestReduxToolit from "./components/TestReduxToolit";
+import Counter from "./components/Counter";
+import GridLayout from "./components/GridLayout";
+import Circle from "./components/Circle";
 
 
 function App() {
@@ -43,7 +50,7 @@ function App() {
       const response=await axios.get("/user/tasks")
        setTask(response.data.user.tasks)
     } catch (error) {
-      
+      console.log("Some Error Occured") 
     }
   }
 
@@ -60,6 +67,13 @@ function App() {
           <Route path="/resetPassword" element={  <Reset/>}/>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/socket" element={<SocketIO />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/redux" element={<TestReduxToolit />} />
+          <Route path="/paymentSuccess" element={<PaymentSuccess />} />
+          <Route path="/counter" element={<Counter />} />
+          <Route path="/grid" element={<GridLayout />} />
+          <Route path="/accounts" element={<Circle />} />
           <Route path="/" element={<Home />}>
             <Route index element={<AllTasks  />} />
             <Route path="/completedTask" element={<CompletedTask />} />

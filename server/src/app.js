@@ -1,6 +1,5 @@
 import express from "express"
 import upload from "./multer/multer.js";
-// import awsupload from "./multer/multers3.js"
 
 import 
 {
@@ -23,6 +22,8 @@ import
  changepassword,
  otpverification,
  awsuserProfile,
+ paymentRecipet,
+ verifyPayment
 } from "./controllers/controller.js";
 
 import { signUpschema } from "./SchemaValidation/SchemaValidation.js";
@@ -60,25 +61,16 @@ app.route("/user/aws").post(awsuserProfile)
 
 app.route("/user/otp").post(otpverification)
 
-
-
-
-
-
-
-
-
 app.route("/user/resetpassword").post(EmailVerification)
+
 app.route("/user/changepassword").post(changepassword)
-
-
-
-
-
-
-
-
 app.route("/user/profile").get(setUserProfile)
 app.route("/user/remove/profile").get(removeUserProfile)
+app.route("/user/paymentReciept").post(paymentRecipet)
+
+app.route("/user/paymentVerify").post(verifyPayment)
+
+
+
 
 export {app}
